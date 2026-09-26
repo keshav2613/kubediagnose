@@ -8,6 +8,16 @@ Instead of manually working through multiple `kubectl get`, `describe`, `logs`, 
 
 ---
 
+## Architecture
+
+<p align="center">
+  <img
+    src="docs/assets/kubediagnose-architecture.png"
+    alt="KubeDiagnose Architecture"
+    width="100%"
+  />
+</p>
+
 ## Why KubeDiagnose?
 
 A Kubernetes workload that is not healthy can fail for many different reasons:
