@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install project and development tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest ruff
+
+      - name: Run Ruff
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest -v
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: kubediagnose:ci
+          load: true
+
+      - name: Test container CLI
+        run: |
+          docker run --rm kubediagnose:ci version
+          docker run --rm kubediagnose:ci --help
+
+      - name: Verify container runs as non-root
+        run: |
+          USER_ID=$(docker run --rm --entrypoint id kubediagnose:ci -u)
+
+          echo "Container UID: $USER_ID"
+
+          if [ "$USER_ID" = "0" ]; then
+            echo "Container is running as root."
+            exit 1
+          fi
