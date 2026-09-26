@@ -28,3 +28,6 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
+[tool.setuptools.packages.find]
+include = ["kubediagnose*"]
+exclude = ["tests*", "k8s*", "failure-labs*"]
