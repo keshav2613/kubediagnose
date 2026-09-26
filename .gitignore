@@ -1,5 +1,5 @@
 .git
-.github
+*.egg-info/
 .venv
 __pycache__
 *.pyc
