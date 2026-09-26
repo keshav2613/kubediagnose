@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: kubediagnose
+Version: 0.1.0
+Summary: Evidence-based Kubernetes workload diagnostics from your terminal
+Requires-Python: >=3.11
+Requires-Dist: kubernetes>=30.1.0
+Requires-Dist: typer>=0.12.0
+Requires-Dist: rich>=13.7.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: ruff>=0.6.0; extra == "dev"
