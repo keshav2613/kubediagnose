@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 IMAGE_PULL_REASONS = {
     "ErrImagePull",
     "ImagePullBackOff",
