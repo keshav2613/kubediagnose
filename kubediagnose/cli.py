@@ -1,6 +1,8 @@
 import ast
 
 import typer
+from kubernetes.client.exceptions import ApiException
+from kubernetes.config.config_exception import ConfigException
 from rich.console import Console
 from rich.panel import Panel
 
@@ -10,7 +12,6 @@ from kubediagnose.rules.imagepull import analyze_imagepull
 from kubediagnose.rules.oom import analyze_oom
 from kubediagnose.rules.probes import analyze_probe_failure
 from kubediagnose.rules.scheduling import analyze_scheduling
-
 
 app = typer.Typer(
     help="Evidence-based Kubernetes workload diagnostics."
@@ -606,16 +607,16 @@ def diagnose(
     except typer.Exit:
         raise
 
-    except Exception as exc:
+    except (ApiException, ConfigException) as exc:
         console.print()
         console.print(
             f"[red]"
             f"✗ Kubernetes connection or diagnostic failed: "
             f"{exc}"
             f"[/red]"
-        )
+    )
 
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
 
 if __name__ == "__main__":
