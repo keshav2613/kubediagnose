@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduling-demo
+  labels:
+    app: scheduling-demo
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: scheduling-demo
+
+  template:
+    metadata:
+      labels:
+        app: scheduling-demo
+
+    spec:
+      containers:
+        - name: scheduling-demo
+          image: nginx:alpine
+
+          resources:
+            requests:
+              memory: "100Gi"
+              cpu: "1"
