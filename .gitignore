@@ -18,6 +18,6 @@ htmlcov
 
 tests
 failure-labs
-docs
+
 
 *.log
