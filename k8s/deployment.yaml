@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubediagnose
+  namespace: default
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kubediagnose
+
+  template:
+    metadata:
+      labels:
+        app: kubediagnose
+
+    spec:
+      serviceAccountName: kubediagnose
+
+      containers:
+        - name: kubediagnose
+          image: kubediagnose:0.1.0
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - /bin/sh
+            - -c
+            - sleep infinity
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
