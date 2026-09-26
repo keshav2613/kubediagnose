@@ -1,7 +1,7 @@
 # KubeDiagnose
 
-[![CI](https://github.com/keshav2613/kubediagnose/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/kubediagnose/actions/workflows/ci.yml)
-[![Security](https://github.com/YOUR-USERNAME/kubediagnose/actions/workflows/security.yml/badge.svg)](https://github.com/keshav2613/kubediagnose/actions/workflows/security.yml)
+[![CI](https://github.com/keshav2613/kubediagnose/actions/workflows/ci.yml/badge.svg)](https://github.com/keshav2613/kubediagnose/actions/workflows/ci.yml)
+[![Security](https://github.com/keshav2613/kubediagnose/actions/workflows/security.yml/badge.svg)](https://github.com/keshav2613/kubediagnose/actions/workflows/security.yml)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Diagnostics-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
