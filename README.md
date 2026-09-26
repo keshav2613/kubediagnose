@@ -1,5 +1,11 @@
 # KubeDiagnose
 
+[![CI](https://github.com/keshav2613/kubediagnose/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/kubediagnose/actions/workflows/ci.yml)
+[![Security](https://github.com/YOUR-USERNAME/kubediagnose/actions/workflows/security.yml/badge.svg)](https://github.com/YOUR-USERNAME/kubediagnose/actions/workflows/security.yml)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Diagnostics-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 **Evidence-based Kubernetes workload diagnostics from the command line.**
 
 KubeDiagnose is a lightweight Python CLI for diagnosing common Kubernetes workload failures. It inspects workload state, pod and container status, Kubernetes events, termination information, and container logs to identify failure conditions and provide actionable troubleshooting guidance.
