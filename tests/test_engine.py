@@ -82,12 +82,13 @@ def make_pod(
     )
 
 
-def make_engine(events=None):
+def make_engine(events=None, previous_logs=None):
     """Create an engine with a mocked Kubernetes client."""
 
     k8s = Mock()
 
     k8s.get_pod_events.return_value = events or []
+    k8s.get_previous_logs.return_value = previous_logs
 
     return DiagnosticEngine(k8s), k8s
 
@@ -202,7 +203,9 @@ def test_engine_detects_readiness_probe_failure():
 
 
 def test_engine_detects_crashloop():
-    engine, _ = make_engine()
+    engine, k8s = make_engine(
+        previous_logs="application startup failed"
+    )
 
     pod = make_pod(
         waiting_reason="CrashLoopBackOff",
@@ -218,6 +221,13 @@ def test_engine_detects_crashloop():
 
     assert result is not None
     assert result.kind == "crashloop"
+    assert result.logs == "application startup failed"
+
+    k8s.get_previous_logs.assert_called_once_with(
+        pod_name="demo-pod",
+        namespace="default",
+        container="demo-container",
+    )
 
 
 def test_engine_returns_none_for_healthy_pod():
