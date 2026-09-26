@@ -16,6 +16,7 @@ class DiagnosticResult:
     pod: Any
     finding: Any
     events: list[Any] | None = None
+    logs: str | bytes | None = None
 
 
 class DiagnosticEngine:
@@ -32,11 +33,14 @@ class DiagnosticEngine:
         """
         Diagnose a single pod.
 
-        Rules are evaluated in priority order so that specific
-        root causes are preferred over more generic symptoms.
+        More specific root causes are evaluated before generic
+        symptoms such as CrashLoopBackOff.
         """
 
+        # ---------------------------------------------------------
         # 1. FailedScheduling
+        # ---------------------------------------------------------
+
         finding = analyze_scheduling(pod)
 
         if finding.detected:
@@ -52,7 +56,10 @@ class DiagnosticEngine:
                 events=events,
             )
 
+        # ---------------------------------------------------------
         # 2. ImagePullBackOff / ErrImagePull
+        # ---------------------------------------------------------
+
         finding = analyze_imagepull(pod)
 
         if finding.detected:
@@ -68,7 +75,10 @@ class DiagnosticEngine:
                 events=events,
             )
 
+        # ---------------------------------------------------------
         # 3. OOMKilled
+        # ---------------------------------------------------------
+
         finding = analyze_oom(pod)
 
         if finding.detected:
@@ -78,7 +88,10 @@ class DiagnosticEngine:
                 finding=finding,
             )
 
+        # ---------------------------------------------------------
         # 4. Readiness / Liveness probe failure
+        # ---------------------------------------------------------
+
         events = self.k8s.get_pod_events(
             pod_name=pod.metadata.name,
             namespace=namespace,
@@ -97,14 +110,24 @@ class DiagnosticEngine:
                 events=events,
             )
 
+        # ---------------------------------------------------------
         # 5. CrashLoopBackOff
+        # ---------------------------------------------------------
+
         finding = analyze_crashloop(pod)
 
         if finding.detected:
+            logs = self.k8s.get_previous_logs(
+                pod_name=pod.metadata.name,
+                namespace=namespace,
+                container=finding.container,
+            )
+
             return DiagnosticResult(
                 kind="crashloop",
                 pod=pod,
                 finding=finding,
+                logs=logs,
             )
 
         return None
